@@ -41,7 +41,7 @@ if errorlevel 1 goto run_command
 :run_command
 for /f %%i in ('powershell -command "Get-Date -Format yyyyMMddHHmmss"') do set t=%%i
 
-pyinstaller --onefile --name="auto_audit_visitor_review_%t%" --icon="res/auto_audit_visitor_review.ico" run.py
+pyinstaller --onefile --name="auto_audit_visitor_review_%t%" --icon="res/auto_audit_visitor_review.ico" --hidden-import=selenium.webdriver.edge.webdriver --hidden-import=selenium.webdriver.edge.service --hidden-import=selenium.webdriver.edge.options --hidden-import=selenium.webdriver.common.by --hidden-import=selenium.webdriver.common.keys --hidden-import=selenium.webdriver.remote.remote_connection --hidden-import=selenium.webdriver.support.ui --hidden-import=selenium.webdriver.support.expected_conditions --hidden-import=selenium.common.exceptions run.py
 echo 打包完成，请按任意键继续...
 pause >nul
 exit
