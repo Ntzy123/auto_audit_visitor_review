@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auto-audit-visitor-review"
+version = "1.0.0"
+description = "基于 Edge WebDriver 的访客审核自动化工具（7x24h 不间断运行）"
+license = { text = "MIT" }
+authors = [{ name = "auto-audit-visitor-review" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "selenium>=4.15.0",
+]
+
+[project.optional-dependencies]
+build = ["pyinstaller"]
+test = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+
+[project.scripts]
+auto-audit-visitor-review = "auto_audit_visitor_review.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+norecursedirs = [
+    ".venv",
+    "venv",
+    "dist",
+    "build",
+]

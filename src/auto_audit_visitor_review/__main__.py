@@ -1,15 +1,12 @@
-# run.py
+# __main__.py - 程序入口
 
 import sys
-import os
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from lib.webdriver_manager import WebDriverManager
-from lib.automation import VisitorReviewAutomation
+from easycheck_manager import WebDriverManager
+from auto_audit_visitor_review.core import VisitorReviewAutomation
 
 
-if __name__ == "__main__":
+def main():
     print("=" * 55)
     print("  EdgeDriver 环境检查")
     print("=" * 55)
@@ -26,3 +23,7 @@ if __name__ == "__main__":
         print("\n  收到中断信号，正在退出...")
         automation.stop()
         sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

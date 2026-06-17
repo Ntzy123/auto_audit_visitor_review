@@ -1,4 +1,0 @@
-selenium>=4.15.0
-requests
-pywin32
-pyinstaller

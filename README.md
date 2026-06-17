@@ -1,36 +1,81 @@
-# 基于Python+EdgeWebdriver处理网页自动化
+# auto_audit_visitor_review - 访客审核自动化工具
 
-### 1. 打开标签页
+基于 Python + Edge WebDriver 的访客审核自动化工具，支持 7x24h 不间断运行。
 
-- https://peoplego.vankeservice.com/#/Embed/visitorReview/pending?phone=18208475905&name=%E8%8A%B1%E6%A2%A6%E8%8E%B2&id=2462900&projectCode=52010017
+---
 
-### 2. 点击元素 div.van-tab:nth-child(2)
+## 项目结构
 
-- 等待选择器最多5000ms，如果点击成功后延迟800毫秒
+```
+auto_audit_visitor_review/
+├── src/
+│   └── auto_audit_visitor_review/    # 主包
+│       ├── __init__.py               # 包初始化
+│       ├── __main__.py               # 程序入口
+│       ├── core.py                   # 审核自动化核心逻辑
+│       └── webdriver_manager.py      # EdgeDriver 管理器
+├── tests/                            # 测试目录
+│   ├── __init__.py
+│   ├── conftest.py                   # pytest 共享配置
+│   ├── test_core.py                  # 核心模块测试
+│   └── test_webdriver_manager.py     # WebDriver 管理器测试
+├── res/                              # 资源文件
+├── .gitignore
+├── Makefile                          # 命令快捷入口
+├── pyproject.toml                    # 项目配置
+├── requirements.txt                  # 依赖清单
+├── run.py                            # 兼容旧入口
+└── setup.bat                         # 环境初始化脚本
+```
 
-### 3. 点击元素 div.van-tab:nth-child(1)
+## 快速开始
 
-- 等待选择器最多5000ms，如果点击成功后延迟3000毫秒
+### 方式 1：使用 Make（推荐）
 
-### 4. 判断元素是否存在 button.van-button--primary
+```bash
+# 创建 venv 并安装依赖
+make setup
 
-- 如果不存在，则延迟300ms后进入步骤7
-- 如果存在，则延迟300ms后进入步骤5
+# 运行程序
+make run
 
-### 5. 点击元素 button.van-button--primary
+# 运行测试
+make test
 
-- 等待选择器最多5000ms，如果点击成功后延迟400毫秒
+# 打包
+make build
+```
 
-### 6. 点击元素 button.van-dialog__confirm
+### 方式 2：使用 setup.bat（Windows）
 
-- 等待选择器最多5000ms，如果点击成功后延迟3000毫秒
+```bash
+.\setup.bat
+```
 
-### 7. 关闭标签页，然后回到步骤1循环
+### 方式 3：直接使用 Python
 
+```bash
+# 激活虚拟环境后
+python -m auto_audit_visitor_review
+```
 
+## 运行测试
 
-#### 注：
+```bash
+# 使用 Make
+make test
 
-#### 1. 如果过程中因网络或服务器或其他原因导致出错，统一跳转至步骤7，进入下一轮循环
+# 或直接使用 pytest
+pytest tests/ -v --cov=src/auto_audit_visitor_review --cov-report=term-missing
+```
 
-#### 2. 这是一个7x24h无间断运行的项目，需要整个流程中有充足的异常情况处理机制，用try except包裹
+## 自动化流程
+
+1. 打开审核页面
+2. 切换到"已审核"标签
+3. 切回"待审核"标签（触发数据刷新）
+4. 检查是否存在"同意"按钮
+5. 如存在则点击"同意"并确认弹窗
+6. 关闭标签页，进入下一轮循环
+
+> 任何步骤失败都会自动跳转到步骤 7，进入下一轮循环，保证 7x24h 不间断运行。
