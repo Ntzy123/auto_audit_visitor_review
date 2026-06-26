@@ -93,13 +93,34 @@ def _finalize_prev_log(date_str):
 
 
 def _trim_old_entries():
-    """删除 aavr.log 中昨天以前（不含昨天）的所有行。"""
+    """删除 aavr.log 中昨天以前（不含昨天）的日志条目。
+    
+    按"日期行 + 附属行"为一组整体判断：非日期行（如 stacktrace 等）
+    跟随前一条日期行的保留策略，不会独立存活。
+    """
     if not os.path.exists(LOG_FILE):
         return
     cutoff = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+
     with open(LOG_FILE, "r", encoding="utf-8") as f:
         lines = f.readlines()
-    kept = [line for line in lines if line[:10] >= cutoff]
+
+    kept = []
+    in_range = False  # 当前条目是否在保留范围内
+
+    for line in lines:
+        # 判断是否为新的日志条目（以 YYYY-MM-DD 开头）
+        is_new_entry = (
+            len(line) >= 10
+            and line[0:4].isdigit()
+            and line[4] == "-"
+        )
+        if is_new_entry:
+            in_range = line[:10] >= cutoff
+
+        if in_range:
+            kept.append(line)
+
     if len(kept) < len(lines):
         with open(LOG_FILE, "w", encoding="utf-8") as f:
             f.writelines(kept)

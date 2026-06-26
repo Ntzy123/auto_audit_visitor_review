@@ -32,6 +32,13 @@ phone = "18085009482"
 name = "李海波"
 uid = "1702071"
 project_code = "52010017"
+
+[[users]]
+id = 3
+phone = "13511994839"
+name = "谭龙萍"
+uid = "2608202"
+project_code = "52010017"
 """
 
 
@@ -85,4 +92,4 @@ def build_url(config):
         "id": config["uid"],
         "projectCode": config["project_code"],
     })
-    return f"{BASE_URL}&{query}"
+    return f"{BASE_URL}?{query}"

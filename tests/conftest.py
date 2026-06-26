@@ -33,8 +33,7 @@ def _mock_all():
                                 "auto_audit_visitor_review.core.build_url",
                                 return_value=(
                                     "https://peoplego.vankeservice.com/#/Embed"
-                                    "/visitorReview/pending"
-                                    "?phone=18208475905"
+                                    "/visitorReview/pending?phone=18208475905"
                                     "&name=%E8%8A%B1%E6%A2%A6%E8%8E%B2"
                                     "&id=2462900"
                                     "&projectCode=52010017"
