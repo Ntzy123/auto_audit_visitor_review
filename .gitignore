@@ -26,6 +26,9 @@ log/
 res/
 *.log
 
+# Config
+config.toml
+
 # Test & coverage
 .coverage
 .coverage.*

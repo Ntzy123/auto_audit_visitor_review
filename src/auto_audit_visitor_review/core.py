@@ -13,6 +13,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException
 
+from auto_audit_visitor_review.config_loader import load_config, build_url
+
 # ---------------------------------------------------------------------------
 # 日志子系统
 #   aavr.log           —— 实时运行日志（所有操作），保留 48 小时
@@ -113,6 +115,13 @@ class VisitorReviewAutomation:
     def __init__(self):
         self.driver = None
         self._log = _get_logger()
+        self._config = load_config()
+        self.URL = build_url(self._config)
+
+    _SELECTOR_TAB_2 = "div.van-tab:nth-child(2)"
+    _SELECTOR_TAB_1 = "div.van-tab:nth-child(1)"
+    _SELECTOR_PRIMARY_BTN = "button.van-button--primary"
+    _SELECTOR_DIALOG_CONFIRM = "button.van-dialog__confirm"
 
     def _create_driver(self):
         options = Options()
@@ -147,19 +156,6 @@ class VisitorReviewAutomation:
         except (TimeoutException, WebDriverException):
             return False
 
-    URL = (
-        "https://peoplego.vankeservice.com/#/Embed/visitorReview/pending"
-        "?phone=18208475905"
-        "&name=%E8%8A%B1%E6%A2%A6%E8%8E%B2"
-        "&id=2462900"
-        "&projectCode=52010017"
-    )
-
-    SELECTOR_TAB_2 = "div.van-tab:nth-child(2)"
-    SELECTOR_TAB_1 = "div.van-tab:nth-child(1)"
-    SELECTOR_PRIMARY_BTN = "button.van-button--primary"
-    SELECTOR_DIALOG_CONFIRM = "button.van-dialog__confirm"
-
     def _step_1_open_url(self):
         try:
             handles = self.driver.window_handles
@@ -180,7 +176,7 @@ class VisitorReviewAutomation:
             return False
 
     def _step_2_click_tab2(self):
-        ok = self._safe_wait_click(self.SELECTOR_TAB_2, 5000, 800)
+        ok = self._safe_wait_click(self._SELECTOR_TAB_2, 5000, 800)
         if ok:
             self._log.info("  [Step2] 点击<已审核>标签页成功")
         else:
@@ -188,7 +184,7 @@ class VisitorReviewAutomation:
         return ok
 
     def _step_3_click_tab1(self):
-        ok = self._safe_wait_click(self.SELECTOR_TAB_1, 5000, 3000)
+        ok = self._safe_wait_click(self._SELECTOR_TAB_1, 5000, 3000)
         if ok:
             self._log.info("  [Step3] 点击<待审核>标签页成功")
         else:
@@ -196,7 +192,7 @@ class VisitorReviewAutomation:
         return ok
 
     def _step_4_check_primary(self):
-        exists = self._element_exists(self.SELECTOR_PRIMARY_BTN, 3000)
+        exists = self._element_exists(self._SELECTOR_PRIMARY_BTN, 3000)
         time.sleep(0.3)
         if exists:
             self._log.info("  [Step4] 检测到同意按钮")
@@ -205,7 +201,7 @@ class VisitorReviewAutomation:
         return exists
 
     def _step_5_click_primary(self):
-        ok = self._safe_wait_click(self.SELECTOR_PRIMARY_BTN, 5000, 400)
+        ok = self._safe_wait_click(self._SELECTOR_PRIMARY_BTN, 5000, 400)
         if ok:
             self._log.info("  [Step5] 点击同意按钮成功")
         else:
@@ -213,7 +209,7 @@ class VisitorReviewAutomation:
         return ok
 
     def _step_6_click_confirm(self):
-        ok = self._safe_wait_click(self.SELECTOR_DIALOG_CONFIRM, 5000, 3000)
+        ok = self._safe_wait_click(self._SELECTOR_DIALOG_CONFIRM, 5000, 3000)
         if ok:
             self._log.info("  [Step6] 点击弹窗确认按钮成功")
             self._log.info("审核成功")

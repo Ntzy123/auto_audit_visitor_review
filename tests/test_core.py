@@ -24,11 +24,13 @@ class TestVisitorReviewAutomation:
 
     def test_constants(self):
         """测试类常量"""
-        assert "peoplego.vankeservice.com" in VisitorReviewAutomation.URL
-        assert VisitorReviewAutomation.SELECTOR_TAB_2 == "div.van-tab:nth-child(2)"
-        assert VisitorReviewAutomation.SELECTOR_TAB_1 == "div.van-tab:nth-child(1)"
-        assert VisitorReviewAutomation.SELECTOR_PRIMARY_BTN == "button.van-button--primary"
-        assert VisitorReviewAutomation.SELECTOR_DIALOG_CONFIRM == "button.van-dialog__confirm"
+        automation = VisitorReviewAutomation()
+        assert "peoplego.vankeservice.com" in automation.URL
+        assert "phone=18208475905" in automation.URL
+        assert automation._SELECTOR_TAB_2 == "div.van-tab:nth-child(2)"
+        assert automation._SELECTOR_TAB_1 == "div.van-tab:nth-child(1)"
+        assert automation._SELECTOR_PRIMARY_BTN == "button.van-button--primary"
+        assert automation._SELECTOR_DIALOG_CONFIRM == "button.van-dialog__confirm"
 
     @patch("auto_audit_visitor_review.core.webdriver")
     def test_create_driver(self, mock_webdriver):
